@@ -13,7 +13,7 @@ def get_activity(username):
         elif res.status_code == 403:
             print("Error: Request limit reached. Please try again later.")
         elif res.status_code != 200:
-            print(f"Error unexpected: {res.status_code}")
+            print(f"Unexpected Error: {res.status_code}")
         else:
             data = res.json()
             if not data:
