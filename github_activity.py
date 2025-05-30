@@ -13,21 +13,23 @@ def get_activity(username):
         elif res.status_code == 403:
             print("Error: Request limit reached. Please try again later.")
         elif res.status_code != 200:
-            print(f"Unexpected Error: {res.status_code}")
+            print(f"Unexpected error: {res.status_code}")
         else:
             data = res.json()
             if not data:
                 print("This user has no recent public activity")
             else:
-                print(f"\nLatest activities of {username}:")
+                print(f"\nLatest public activities by {username}:")
                 for event in data[:5]: #show the latest 5
-                    print(f"{event['type']} in {event['repo']['name']} at {event['created_at']}")
+                    created_at = datetime.strptime(event['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+                    formatted_date = created_at.strftime("%d %b %Y, %H:%M")
+                    print(f"{event['type']} in {event['repo']['name']} at {formatted_date}")
     except requests.exceptions.RequestException as e:
         print(f"Network Error: {e}")
 
 def main():
     if len(sys.argv) < 2:
-        print("Error: you must add a github username")
+        print("Error: You must provide a GitHub username.")
         sys.exit(1)
     username = sys.argv[1]
     get_activity(username)
